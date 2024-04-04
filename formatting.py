@@ -35,16 +35,17 @@ def formatting_phones(contact_list: list):
     return contact_list
 
 
+merged_data = {}
 def group_fio(contacts: list):
-    grouped_data = {}
-    for item in contacts[1:]:
+    for item in contacts:
         key = (item[0], item[1])
-        if key not in grouped_data:
-            grouped_data[key] = item[2:]
-        # else:
-        #     for el in item[2:]:
-        #         if el not in grouped_data[key]:
-        #             grouped_data[key].append(el)
-    contact_list = [list(key) + value for key, value in grouped_data.items()]
-    contact_list.insert(0, contacts[0])
-    return contact_list
+        if key not in merged_data:
+            merged_data[key] = item
+        else:
+            merged_item = [merged_data[key][0], merged_data[key][1]]
+            for i in range(2, len(item)):
+                merged_item.append(item[i] if item[i] else merged_data[key][i])
+            merged_data[key] = merged_item
+
+    final_data = list(merged_data.values())
+    return final_data
